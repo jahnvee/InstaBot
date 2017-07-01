@@ -1,8 +1,8 @@
 import requests
-import urllib
 from token2 import ACCESS_TOKEN
 from textblob import TextBlob
 from textblob.sentiments import NaiveBayesAnalyzer
+import urllib
 
 BASE_URL = 'https://api.instagram.com/v1/'
 
@@ -273,6 +273,53 @@ def delete_negative_comment(insta_username):
 
 
 
+
+def targeted_comments():
+    tag_name=raw_input("enter the tag you want to search posts of = ")
+    request_url = (BASE_URL + "tags/%s?access_token=%s") % (tag_name, ACCESS_TOKEN)
+    post_tag= requests.get(request_url).json()
+    if post_tag['meta']['code'] == 200:
+        print "%s media with %s name "%(post_tag["data"]["media_count"],post_tag["data"]["name"])
+    else:
+        print 'Unable to delete comment!'
+
+
+
+
+def recently_tagged_media():
+    tag_name = raw_input("enter the tag you want to search posts of = ")
+    request_url = (BASE_URL + "tags/%s/media/recent?access_token=%s") % (tag_name, ACCESS_TOKEN)
+    post_tag = requests.get(request_url).json()
+    if post_tag['meta']['code'] == 200:
+        for ids in range(0,len(post_tag["data"])):
+            media_id=post_tag["data"][ids]["id"]
+            user_name=post_tag["data"][ids]["user"]["username"]
+            print "%s media id with %s username " % (media_id, user_name)
+    else:
+        print 'Unable to reach tagged media!'
+
+#function declaration to post targeted comments based on caption
+def post_targeted_comments():
+    tag_name = raw_input("enter the tag you want to search posts of = ")
+    request_url = (BASE_URL + "tags/%s/media/recent?access_token=%s") % (tag_name, ACCESS_TOKEN)
+    post_tag = requests.get(request_url).json()
+    if post_tag['meta']['code'] == 200:
+        comment_text = raw_input("Your comment: ")
+        payload = {"access_token": ACCESS_TOKEN, "text": comment_text}
+        for ids in range(0, len(post_tag["data"])):
+            media_id = post_tag["data"][ids]["id"]
+            user_name = post_tag["data"][ids]["user"]["username"]
+            print "%s media of %s user"%(media_id,user_name)
+            request_url = (BASE_URL + 'media/%s/comments') % (media_id)
+            print 'POST request url : %s' % (request_url)
+            make_comment = requests.post(request_url, payload).json()
+            if make_comment['meta']['code'] == 200:
+                print "Successfully added a new comment!"
+            else:
+                print "Unable to add comment. Try again!"
+
+
+
 def start_bot():
     while True:
         print "\n"
@@ -287,7 +334,8 @@ def start_bot():
         print "g.Get Comment List\n"
         print "h.Leave a comment on a post\n"
         print "i.Delete negative comments\n"
-        print "j.Exit\n"
+        print "j.targeted comments based on caption\n"
+        print "k.Exit\n"
 
 
         choice = raw_input("Enter you choice: ")
@@ -316,7 +364,10 @@ def start_bot():
         elif choice=="i":
             insta_username = raw_input("Enter the username of the user: ")
             delete_negative_comment(insta_username)
-        elif choice == "j":
+        elif choice=="j":
+            post_targeted_comments()
+
+        elif choice == "k":
             exit()
         else:
             print "wrong choice"
