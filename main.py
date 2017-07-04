@@ -6,6 +6,9 @@ import urllib
 
 BASE_URL = 'https://api.instagram.com/v1/'
 
+#sandbox user : "jahnvee.sharma"
+# friend in sandbox: "shiwani314"
+
 def self_info():
   request_url = (BASE_URL + "users/self/?access_token=%s") % (ACCESS_TOKEN)
   user_info = requests.get(request_url).json()
@@ -273,31 +276,6 @@ def delete_negative_comment(insta_username):
 
 
 
-
-def targeted_comments():
-    tag_name=raw_input("enter the tag you want to search posts of = ")
-    request_url = (BASE_URL + "tags/%s?access_token=%s") % (tag_name, ACCESS_TOKEN)
-    post_tag= requests.get(request_url).json()
-    if post_tag['meta']['code'] == 200:
-        print "%s media with %s name "%(post_tag["data"]["media_count"],post_tag["data"]["name"])
-    else:
-        print 'Unable to delete comment!'
-
-
-
-
-def recently_tagged_media():
-    tag_name = raw_input("enter the tag you want to search posts of = ")
-    request_url = (BASE_URL + "tags/%s/media/recent?access_token=%s") % (tag_name, ACCESS_TOKEN)
-    post_tag = requests.get(request_url).json()
-    if post_tag['meta']['code'] == 200:
-        for ids in range(0,len(post_tag["data"])):
-            media_id=post_tag["data"][ids]["id"]
-            user_name=post_tag["data"][ids]["user"]["username"]
-            print "%s media id with %s username " % (media_id, user_name)
-    else:
-        print 'Unable to reach tagged media!'
-
 #function declaration to post targeted comments based on caption
 def post_targeted_comments():
     tag_name = raw_input("enter the tag you want to search posts of = ")
@@ -319,6 +297,36 @@ def post_targeted_comments():
                 print "Unable to add comment. Try again!"
 
 
+# using media search
+def lat_lon():
+    lat2 = 30.0272
+    long2 = 77.1493
+    request_url = (BASE_URL + "media/search?lat=%f&lng=%f&access_token=%s&distance=5000") % (lat2, long2, ACCESS_TOKEN)
+    locate = requests.get(request_url).json()
+    if locate['meta']['code'] == 200:
+        if len(locate['data']):
+            keyword = raw_input("what are you searching for ? =")
+            comment_text = raw_input("Your comment: ")
+            for ids in range(0, len(locate["data"])):
+                    caption_text = str(locate["data"][ids]["caption"])
+                    comment = caption_text.split(" ")
+                    if keyword in comment:
+                        print "keyword found in post"
+                        media_id = locate["data"][ids]["id"]
+                        payload = {"access_token": ACCESS_TOKEN, "text": comment_text}
+                        request_url = (BASE_URL + 'media/%s/comments') % (media_id)
+                        make_comment = requests.post(request_url, payload).json()
+                        if make_comment['meta']['code'] == 200:
+                            print "Successfully added a new comment!"
+                        else:
+                            print "Unable to add comment. Try again!"
+                    else:
+                        print"your searched keyword in not in the recent media from this location"
+        else:
+            print "no data present"
+    else:
+        print "status code other than 200 received"
+
 
 def start_bot():
     while True:
@@ -334,8 +342,9 @@ def start_bot():
         print "g.Get Comment List\n"
         print "h.Leave a comment on a post\n"
         print "i.Delete negative comments\n"
-        print "j.targeted comments based on caption\n"
-        print "k.Exit\n"
+        print "j.targeted comments based on tags\n"
+        print "k.targeted comments based on caption\n"
+        print "l.Exit\n"
 
 
         choice = raw_input("Enter you choice: ")
@@ -344,30 +353,66 @@ def start_bot():
         elif choice == "b":
             insta_username = raw_input("Enter the username of the user: ")
             user_data(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice == "c":
             get_own_post()
         elif choice == "d":
             insta_username = raw_input("Enter the username of the user: ")
             get_user_post(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="e":
             insta_username = raw_input("Enter the username of the user: ")
             get_like_list(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="f":
             insta_username = raw_input("Enter the username of the user: ")
             like_a_post(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="g":
             insta_username = raw_input("Enter the username of the user: ")
             get_comment_list(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="h":
             insta_username = raw_input("Enter the username of the user: ")
             post_a_comment(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="i":
             insta_username = raw_input("Enter the username of the user: ")
             delete_negative_comment(insta_username)
+            if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                print "Invalid entry. Please enter a Valid Name!"
+                insta_username = raw_input("Enter the username: ")
+            else:
+                print "That's a valid username"
         elif choice=="j":
             post_targeted_comments()
-
         elif choice == "k":
+            lat_lon()
+        elif choice == "l":
             exit()
         else:
             print "wrong choice"
