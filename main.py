@@ -308,8 +308,9 @@ def lat_lon():
             keyword = raw_input("what are you searching for ? =")
             comment_text = raw_input("Your comment: ")
             for ids in range(0, len(locate["data"])):
-                    caption_text = str(locate["data"][ids]["caption"])
+                    caption_text = str(locate["data"][ids]["caption"]["text"])
                     comment = caption_text.split(" ")
+
                     if keyword in comment:
                         print "keyword found in post"
                         media_id = locate["data"][ids]["id"]
@@ -326,6 +327,7 @@ def lat_lon():
             print "no data present"
     else:
         print "status code other than 200 received"
+
 
 
 def start_bot():
