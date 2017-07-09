@@ -336,7 +336,7 @@ def get_comment_list(insta_username):
             print "media id = %s" % media_id  # print media
             for users in range(0,len(comment_list['data'])):
                 print"%d.%s : %s" % (item + 1,comment_list['data'][users]['from']['username'], comment_list['data'][users]['text'])
-                item=item+1
+                item=item+1  # used as serial number
         else:
             print"there is no comment on this post!"
     else:
@@ -348,9 +348,9 @@ def get_comment_list(insta_username):
 def post_a_comment(insta_username):
     media_id = get_media_id(insta_username)
     comment_text = raw_input("Your comment: ")
-    text=comment_text.split(" ")
+    text=comment_text.split(" ")  # split comment text to count words for further use
     if comment_text != "":
-        if len(text)>50:
+        if len(text)>50:  # when words in comment exceed 50
             print "Unable to add a comment with length more than 50 words!!"
         else:
             payload = {"access_token": ACCESS_TOKEN, "text": comment_text}
@@ -465,23 +465,23 @@ def get_loc():
 
     choice = raw_input("select your area number =")
     if choice == "1":
-        lat1 = float(location[0]["Lat"])
+        lat1 = float(location[0]["Lat"])  # location 1 will be on index 0 on list
         long1 = float(location[0]["Long"])
         lat_lon(lat1, long1)      # call function post comment based on location latitude and longitude provided in arguments
     elif choice == "2":
-        lat1 = float(location[1]["Lat"])
+        lat1 = float(location[1]["Lat"])  # location 2 will be on index 1
         long1 = float(location[1]["Long"])
-        lat_lon(lat1, long1)
+        lat_lon(lat1, long1)  #function calling for targeting comments
     elif choice == "3":
-        lat1 = float(location[2]["Lat"])
+        lat1 = float(location[2]["Lat"])  #location 3 will be on index 2
         long1 = float(location[2]["Long"])
         lat_lon(lat1, long1)
     elif choice == "4":
-        lat1 = float(location[3]["Lat"])
+        lat1 = float(location[3]["Lat"])  # location 4 will be on index 3
         long1 = float(location[3]["Long"])
         lat_lon(lat1, long1)
     elif choice == "5":
-        lat1 = float(location[4]["Lat"])
+        lat1 = float(location[4]["Lat"])  # location 5 will be on index 4
         long1 = float(location[4]["Long"])
         lat_lon(lat1, long1)
     else:
@@ -493,7 +493,7 @@ def get_loc():
 def start_bot():
     while True:  #loop will continue to execute till user enter the exit key (here its "l")
         print "\n"
-
+        # list of different choices for user to proceed in InstaBot
         print "Select any option to proceed:\n"
         print "a.Get your own details\n"
         print "b.Get details of a user by username\n"
@@ -515,7 +515,7 @@ def start_bot():
         elif choice == "b":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username) > 0 and insta_username.isspace() == False:   # condition will be true when username is not null and there is no space in username
-                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # when stated symbols are encountered in username
+                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when stated symbols are encountered in username
                     print "Invalid entry. Please enter a Valid Name!"
                     insta_username = raw_input("Enter the username: ")
                     if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
@@ -539,8 +539,8 @@ def start_bot():
             print "4. recently liked media by user"
             choose=raw_input("Choose medium to get post: ")   # take numeric input to choose from above list
             if choose=="1":
-                if len(insta_username) > 0 and insta_username.isspace() == False:
-                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when username is not null and there is no space in username
+                if len(insta_username) > 0 and insta_username.isspace() == False:# condition will be true when username is not null and there is no space in username
+                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
                         print "Invalid entry. Please enter a Valid Name!"
                         insta_username = raw_input("Enter the username: ")
                         if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
@@ -571,10 +571,10 @@ def start_bot():
 
             elif choose == "3":
                 if len(insta_username) > 0 and insta_username.isspace() == False:   # condition will be true when username is not null and there is no space in username
-                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):   # condition will be true when stated symbols are encountered in username
                         print "Invalid entry. Please enter a Valid Name!"
                         insta_username = raw_input("Enter the username: ")
-                        if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                        if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):# condition will be true when stated symbols are encountered in username
                             print"invalid entry! try again later!"
                             exit()
                         else:
@@ -593,10 +593,10 @@ def start_bot():
         elif choice=="e":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username) > 0 and insta_username.isspace() == False:
-                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when stated symbols are encountered in username
                     print "Invalid entry. Please enter a Valid Name!"
                     insta_username = raw_input("Enter the username again: ")
-                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when stated symbols are encountered in username
                         print "Invalid entry. Please try later!"
                         exit()
                     else:
@@ -612,9 +612,9 @@ def start_bot():
                 if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
                     print "Invalid entry. Please enter a Valid Name!"
                     insta_username = raw_input("Enter the username: ")
-                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username): # condition will be true when stated symbols are encountered in username
                         print "Invalid entry. Please try later!"
-                        exit()
+                        exit()   # exit from application
                     else:
                         like_a_post(insta_username)
                 else:
@@ -625,7 +625,7 @@ def start_bot():
         elif choice=="g":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username) > 0 and insta_username.isspace() == False:  # condition will be true when username is not null and there is no space in username
-                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when stated symbols are encountered in username
                     print "Invalid entry. Please enter a Valid Name!"
                     insta_username = raw_input("Enter the username: ")
                     if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
@@ -641,9 +641,9 @@ def start_bot():
         elif choice=="h":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username) > 0 and insta_username.isspace() == False:  # condition will be true when username is not null and there is no space in username
-                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):  # condition will be true when stated symbols are encountered in username
                     print "Invalid entry. Please enter a Valid Name!"
-                    insta_username = raw_input("Enter the username: ")
+                    insta_username = raw_input("Enter the username: ")  # ask user to again enter username
                     if set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
                         print "Invalid entry. Please try later!"
                         exit()
@@ -653,7 +653,7 @@ def start_bot():
                     post_a_comment(insta_username)
             else:
                 print Fore.LIGHTWHITE_EX + Back.RED + "Please enter a valid username"
-                print (Style.RESET_ALL)
+                print (Style.RESET_ALL)   # reset style
         elif choice=="i":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username) > 0 and insta_username.isspace() == False:  # condition will be true when username is not null and there is no space in username
@@ -669,7 +669,7 @@ def start_bot():
                     delete_negative_comment(insta_username)
             else:
                 print Fore.LIGHTWHITE_EX+ Back.RED + "Please enter a valid username"
-                print (Style.RESET_ALL)
+                print (Style.RESET_ALL)  # reset style to cease effect of colorama
         elif choice == "j":
             post_targeted_comments()
         elif choice == "k":
