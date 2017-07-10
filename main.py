@@ -196,7 +196,7 @@ def get_user_post2(insta_username):
                 keyword = raw_input("what are you searching for ? =")  # take keyword as input that user is searching in post captions
                 for ids in range(0, len(user_med["data"])):  # for all the posts
                     if len(user_med["data"][ids]["caption"]):
-                        caption_text = str(user_med["data"][ids]["caption"])  # retrieve caption of the post
+                        caption_text = str(user_med["data"][ids]["caption"]["text"])  # retrieve caption of the post
                         comment = caption_text.split(" ")  # split caption text to form a list
                         if keyword in comment:  # this will search keyword in the list "comment"
                             print "keyword found in post"
